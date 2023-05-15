@@ -2,13 +2,18 @@ const express = require('express');
 const dotenv = require('dotenv');
 const { chats } = require('./data/data');
 dotenv.config({path: "../.env"});
+// dotenv.config();
 const connectDb = require('./config/db');
 
 const userRoutes = require('./Routes/userRoutes');
+const {notFound, errorHandler}  = require('./middleware/errorMiddleware');
 
 
 const app = express();
 connectDb();
+
+
+app.use(express.json()); // to accept JSON data
 
 
 app.get('/', (req, res)=>{
@@ -29,6 +34,11 @@ app.get('/', (req, res)=>{
 
 app.use('/api/user', userRoutes);
 
+// ERROR HANDELLIG -> if some routes does not exists
 
-const PORT = process.env.PORT;
+app.use(notFound);
+app.use(errorHandler);
+
+
+const PORT = process.env.PORT  || 5000;
 app.listen(PORT, console.log(`listening on ${PORT}`));
