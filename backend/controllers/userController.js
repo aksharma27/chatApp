@@ -75,7 +75,7 @@ const allUsers = asyncHandler(async (req, res) => {
     } : {};
 
     //find all the users in keyword except the user logged in
-    const users = await User.find(keyword)//.find({_id:{$ne:req.user._id}});       //id = all except current user(ne = not equals)
+    const users = await User.find(keyword).find({_id:{$ne:req.user._id}});  //id = all except current user(ne = not equals)
     res.send(users);
     // console.log(keyword)
 })
