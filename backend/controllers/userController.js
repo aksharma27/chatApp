@@ -5,6 +5,7 @@ const User = require('../models/userModel');
 // import User from '../models/userModel';
 const asyncHandler = require('express-async-handler');
 const { useRadio } = require('@chakra-ui/react');
+const userModel = require('../models/userModel');
 
 const registereUser = (async (req, res) => {
     const {name, email, password, pic} = req.body;
@@ -59,6 +60,24 @@ const authUser = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error("Invalid email or password");
     }
+});
+
+
+// endpoiint => api/user?search=abhishek
+const allUsers = asyncHandler(async (req, res) => {
+    // if want to filter using _id : we take req.params._id. But when using query, we take req.query.query_name, here search
+    const keyword = req.query.search
+     ? {
+        $or : [
+            {name : {$regex : req.query.search, $options: "i"}},        // i -> for case insensitive
+            {email : {$regex : req.query.search, $options: "i"}}
+        ]
+    } : {};
+
+    //find all the users in keyword except the user logged in
+    const users = await User.find(keyword)//.find({_id:{$ne:req.user._id}});       //id = all except current user(ne = not equals)
+    res.send(users);
+    // console.log(keyword)
 })
 
-module.exports = {registereUser, authUser};
+module.exports = {registereUser, authUser, allUsers};
