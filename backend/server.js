@@ -6,6 +6,7 @@ dotenv.config({path: "../.env"});
 const connectDb = require('./config/db');
 
 const userRoutes = require('./Routes/userRoutes');
+const chatRoutes = require('./Routes/chatRoutes');
 const {notFound, errorHandler}  = require('./middleware/errorMiddleware');
 
 
@@ -33,6 +34,7 @@ app.get('/', (req, res)=>{
 
 
 app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
 
 // ERROR HANDELLIG -> if some routes does not exists
 
