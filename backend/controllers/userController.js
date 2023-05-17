@@ -78,6 +78,6 @@ const allUsers = asyncHandler(async (req, res) => {
     const users = await User.find(keyword).find({_id:{$ne:req.user._id}});  //id = all except current user(ne = not equals)
     res.send(users);
     // console.log(keyword)
-})
+});
 
 module.exports = {registereUser, authUser, allUsers};
